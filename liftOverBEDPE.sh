@@ -55,7 +55,8 @@ echo "===================================================="
 echo "4) Merging back"
 
 COL=$(awk -F'\t' 'NR == 1 {print NF}' input_2nd.bed)
-`join -1 4 -2 $COL -t $'\t' input_1st.bed input_2nd.bed > tmp.bedpe`
+## I don't know why, but excute directly will raise a bug
+echo "join -1 4 -2 $COL -t $'\\t' <( cat input_1st.bed | sort -k4n ) <( cat input_2nd.bed | sort -k${COL}n ) > tmp.bedpe" | bash
 
 STEM=${input%.bedpe}
 `cut -f2- tmp.bedpe > "$STEM"_"$TO".bedpe`
